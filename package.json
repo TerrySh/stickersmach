@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
+    "dev": "cross-env APP_VARIANT=development npx expo start",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -13,8 +14,10 @@
     "@expo/vector-icons": "^14.0.0",
     "dom-to-image": "^2.6.0",
     "expo": "~51.0.14",
+    "expo-dev-client": "~4.0.19",
     "expo-image-picker": "~15.0.5",
     "expo-media-library": "~16.0.3",
+    "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -22,11 +25,11 @@
     "react-native-gesture-handler": "~2.16.1",
     "react-native-reanimated": "~3.10.1",
     "react-native-view-shot": "3.8.0",
-    "react-native-web": "~0.19.10",
-    "expo-splash-screen": "~0.27.5"
+    "react-native-web": "~0.19.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "cross-env": "^7.0.3"
   },
   "private": true
 }
