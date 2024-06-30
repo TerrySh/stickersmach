@@ -41,6 +41,7 @@ export default {
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": getUniqueIdentifier(),
+      "buildNumber": "1",
     },
     "android": {
       "adaptiveIcon": {
@@ -48,6 +49,7 @@ export default {
         "backgroundColor": "#ffffff"
       },
       "package": getUniqueIdentifier(),
+      "versionCode": "1",
     },
     "web": {
       "favicon": "./assets/favicon.png"
