@@ -8,17 +8,17 @@ import { captureRef } from 'react-native-view-shot';
 import domtoimage from 'dom-to-image';
 import * as SplashScreen from 'expo-splash-screen';
 
-import ImageViewer from './components/ImageViewer';
-import Button  from './components/Button';
-import CircleButton from './components/CircleButton';
-import IconButton from './components/IconButton';
-import EmojiPicker from './components/EmojiPicker';
-import EmojiList from './components/EmojiList';
-import EmojiStiker from './components/EmojiSticker';
+import ImageViewer from '../../components/ImageViewer'
+import Button  from '../../components/Button';
+import CircleButton from '../../components/CircleButton';
+import IconButton from '../../components/IconButton';
+import EmojiPicker from '../../components/EmojiPicker';
+import EmojiList from '../../components/EmojiList';
+import EmojiStiker from '../../components/EmojiSticker';
 
-const PlaceholderImage = require('./assets/images/background-image.png');
+const PlaceholderImage = require('../../assets/images/background-image.png');
 
-export default function App() {
+export default function StickerSmash() {
 
   SplashScreen.preventAutoHideAsync();
   setTimeout(SplashScreen.hideAsync, 1000);

@@ -52,13 +52,18 @@ export default {
       "versionCode": "1",
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
     },
     "extra": {
       "eas": {
         "projectId": "768b23cb-7376-4e7d-a31b-d72c72eab23e"
       }
     },
-    "owner": "ben109"
+    "owner": "ben109",
+    "plugins": [
+        "expo-router"
+      ],
+    "scheme": "your-app-scheme",
   }
 }
