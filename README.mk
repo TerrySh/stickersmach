@@ -5,9 +5,6 @@ v18.17.1
 
 https://docs.expo.dev/tutorial/create-your-first-app/
 
---after change module code:
-npx expo prebuild --clean
-
 
 create a development build:
 eas build --platform android --profile development
@@ -21,8 +18,15 @@ eas build --platform android
 
 https://docs.expo.dev/tutorial/eas/android-production-build/
 
+
 native module:
+--Create a local expo module:
+npx create-expo-module@latest --local
+
+--prebuild -generate andorid/ios directories
 npx expo prebuild --clean
+
+--run on emulator
 npx expo run:android
 npx expo run:ios
 
