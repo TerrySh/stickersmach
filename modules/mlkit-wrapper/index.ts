@@ -9,7 +9,7 @@ import { ChangeEventPayload, MlkitWrapperViewProps } from './src/MlkitWrapper.ty
 // Get the native constant value.
 export const PI = MlkitWrapperModule.PI;
 
-export function hello(): string {
+export function strokeRecognition(): string {
   return MlkitWrapperModule.hello();
 }
 
