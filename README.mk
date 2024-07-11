@@ -21,3 +21,8 @@ eas build --platform android
 
 https://docs.expo.dev/tutorial/eas/android-production-build/
 
+native module:
+npx expo prebuild --clean
+npx expo run:android
+npx expo run:ios
+

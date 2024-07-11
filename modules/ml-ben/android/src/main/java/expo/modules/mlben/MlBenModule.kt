@@ -23,7 +23,7 @@ class MlBenModule : Module() {
 
     // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
     Function("hello") {
-      "Hello worfffld! 🌎🤖"
+      "dfefefesafasdf worfffld! 🌎🤖"
     }
 
     // Defines a JavaScript function that always returns a Promise and whose native code
