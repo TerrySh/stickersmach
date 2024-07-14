@@ -18,6 +18,10 @@ public class MlBenModule: Module {
     Function("getTheme") { () -> String in
       UserDefaults.standard.string(forKey: "theme") ?? Theme.system.rawValue
     }
+
+    // AsyncFunction("recognizeInk") { (strokes: String) in
+
+    // }
   }
 
   enum Theme: String, Enumerable {

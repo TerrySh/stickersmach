@@ -1,5 +1,6 @@
 import {EventEmitter, Subscription} from 'expo-modules-core';
 import MlBenModule from './src/MlBenModule';
+import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 
 const emitter = new EventEmitter(MlBenModule);
 
@@ -19,4 +20,8 @@ export function getTheme(): Theme {
 
 export function setTheme(theme: Theme): void {
   return MlBenModule.setTheme(theme);
+}
+
+export async function recognizeInkAsync(strokes) {
+  return await MlBenModule.recognizeInkAsync(strokes);
 }
