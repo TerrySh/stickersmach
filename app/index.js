@@ -1,11 +1,12 @@
 import { Button, Text, View } from "react-native";
 import { Link } from "expo-router";
 import React from "react";
+// import InckRec from "./ink-recog";
 
 export default function Page(){
 
     return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <Text>Home Page</Text>
             <Link href="/ink-recog">ink recog</Link>
             <Link href="/sticker-smash">Sticker Smash</Link>

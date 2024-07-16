@@ -14,10 +14,10 @@ export default function InkCanvas ({ onStrokeEnd }) {
         currentStroke.current.push([locationX,locationY,Date.now()]);
       },
       onPanResponderRelease: () => {
-        var newState = [...strokes, currentStroke.current];
+        
         // console.log(newState);
-        setStrokes(newState);
-        onStrokeEnd(newState);
+        setStrokes([...strokes, currentStroke.current]);
+        onStrokeEnd([...strokes, currentStroke.current]);
         currentStroke.current = [];
       },
     })
@@ -45,7 +45,7 @@ export default function InkCanvas ({ onStrokeEnd }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'yellow',
   },
   strokeContainer: {
     position: 'absolute',
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 4,
     height: 4,
-    backgroundColor: 'black',
+    backgroundColor: 'red',
     borderRadius: 2,
   },
 });
