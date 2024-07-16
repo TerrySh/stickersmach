@@ -23,5 +23,5 @@ export function setTheme(theme: Theme): void {
 }
 
 export async function recognizeInkAsync(strokes) {
-  return await MlBenModule.recognizeInkAsync(strokes);
+  return await MlBenModule.recognizeInk(strokes);
 }

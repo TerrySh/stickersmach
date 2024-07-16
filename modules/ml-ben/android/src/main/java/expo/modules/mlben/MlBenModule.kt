@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.os.bundleOf
 import com.facebook.react.bridge.ReadableArray
-import expo.modules.kotlin.modules.Module
-import expo.modules.kotlin.modules.ModuleDefinition
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.vision.digitalink.*
 import expo.modules.kotlin.Promise
+import expo.modules.kotlin.modules.Module
+import expo.modules.kotlin.modules.ModuleDefinition
 import expo.modules.kotlin.types.Enumerable
 
 class MlBenModule : Module() {
@@ -25,91 +27,90 @@ class MlBenModule : Module() {
       return@Function getPreferences().getString("theme", "system")
     }
 
-
-    AsyncFunction("recognizeInkAsync") { strokes: ReadableArray, promise: Promise ->
-            val inkBuilder = Ink.builder()
-            for (i in 0 until strokes.size()) {
-              val stroke = strokes.getArray(i)
-              val strokeBuilder = Ink.Stroke.builder()
-              for (j in 0 until stroke!!.size()) {
-                  val point = stroke.getArray(j)
-                  val x = point!!.getDouble(0).toFloat()
-                  val y = point.getDouble(1).toFloat()
-                  val t = point.getDouble(2).toLong()
-                  strokeBuilder.addPoint(Ink.Point.create(x, y, t))
-              }
-              inkBuilder.addStroke(strokeBuilder.build())
-            }
-            val ink = inkBuilder.build()
-
-            val modelIdentifier = DigitalInkRecognitionModelIdentifier.fromLanguageTag("en-US")
-            if (modelIdentifier == null) {
-                promise.reject("MODEL_ERROR", "Model identifier could not be created", null)
-                return@AsyncFunction
-            }
-
-            val model = DigitalInkRecognitionModel.builder(modelIdentifier).build()
-            val recognizerOptions = DigitalInkRecognizerOptions.builder(model).build()
-            val recognizer = DigitalInkRecognition.getClient(recognizerOptions)
-
-            recognizer.recognize(ink)
-                .addOnSuccessListener { result ->
-                    val candidates = result.candidates
-                    if (candidates.isNotEmpty()) {
-                        promise.resolve(candidates[0].text)
-                    } else {
-                        promise.reject("NO_TEXT", "No text recognized", null)
-                    }
-                }
-                .addOnFailureListener { e -> promise.reject("ERROR","error", e) }
-    }
-
-
     AsyncFunction("recognizeInk") { strokes: ReadableArray, promise: Promise ->
+      try {
         val inkBuilder = Ink.builder()
         for (i in 0 until strokes.size()) {
-          val stroke = strokes.getArray(i)
+          val strokeArray = strokes.getArray(i)
           val strokeBuilder = Ink.Stroke.builder()
-          for (j in 0 until stroke!!.size()) {
-              val point = stroke.getArray(j)
-              val x = point!!.getDouble(0).toFloat()
-              val y = point.getDouble(1).toFloat()
-              val t = point.getDouble(2).toLong()
-              strokeBuilder.addPoint(Ink.Point.create(x, y, t))
+          for (j in 0 until strokeArray!!.size()) {
+            val pointArray = strokeArray.getArray(j)
+            val x = pointArray!!.getDouble(0).toFloat()
+            val y = pointArray.getDouble(1).toFloat()
+            val t = pointArray.getDouble(2).toLong()  // Convert the timestamp to Long
+            strokeBuilder.addPoint(Ink.Point.create(x, y, t))
           }
           inkBuilder.addStroke(strokeBuilder.build())
         }
-
         val ink = inkBuilder.build()
 
         val modelIdentifier = DigitalInkRecognitionModelIdentifier.fromLanguageTag("en-US")
         if (modelIdentifier == null) {
-            promise.reject("MODEL_ERROR", "Model identifier could not be created", null)
-            return@AsyncFunction
+          promise.reject("MODEL_ERROR", "Model identifier could not be created", null)
+          return@AsyncFunction
         }
 
         val model = DigitalInkRecognitionModel.builder(modelIdentifier).build()
         val recognizerOptions = DigitalInkRecognizerOptions.builder(model).build()
         val recognizer = DigitalInkRecognition.getClient(recognizerOptions)
+        val modelManager = RemoteModelManager.getInstance()
 
-        recognizer.recognize(ink)
-            .addOnSuccessListener { result ->
-                val candidates = result.candidates
-                if (candidates.isNotEmpty()) {
-                    promise.resolve(candidates[0].text)
-                } else {
-                    promise.reject("NO_TEXT", "No text recognized", null)
+        // Check if the model is downloaded
+        modelManager.isModelDownloaded(model)
+          .addOnSuccessListener { isDownloaded ->
+            if (!isDownloaded) {
+              //Log.e("InkRecognition", "Model not downloaded")
+              promise.reject("MODEL_NOT_DOWNLOADED", "Model not downloaded", null)
+              // Download the model
+              modelManager.download(model, DownloadConditions.Builder().build())
+                .addOnSuccessListener {
+                  //Log.d("InkRecognition", "Model downloaded successfully")
+                  // Proceed with recognition
+                  recognizeInk(ink, recognizer, promise)
                 }
+                .addOnFailureListener { e ->
+                  //Log.e("InkRecognition", "Error downloading model", e)
+                  promise.reject("DOWNLOAD_ERROR", e.message, e)
+                }
+            } else {
+              //Log.d("InkRecognition", "Model is downloaded")
+              // Proceed with recognition
+              recognizeInk(ink, recognizer, promise)
             }
-            .addOnFailureListener { e -> promise.reject("ERROR", "error", e) }
+          }
+          .addOnFailureListener { e ->
+            //Log.e("InkRecognition", "Error checking model download status", e)
+            promise.reject("ERROR", e.message, e)
+          }
+      } catch (e: Exception) {
+        promise.reject("EXCEPTION", e.message, e)
+      }
     }
+
   }
+
+  val remoteModelManager: RemoteModelManager = RemoteModelManager.getInstance()
 
   private val context
   get() = requireNotNull(appContext.reactContext)
  
   private fun getPreferences(): SharedPreferences {
       return context.getSharedPreferences(context.packageName + ".settings", Context.MODE_PRIVATE)
+  }
+
+  private fun recognizeInk(ink: Ink, recognizer: DigitalInkRecognizer, promise: Promise) {
+    recognizer.recognize(ink)
+      .addOnSuccessListener { result ->
+        val candidates = result.candidates
+        if (candidates.isNotEmpty()) {
+          promise.resolve(candidates[0].text)
+        } else {
+          promise.reject("NO_TEXT", "No text recognized", null)
+        }
+      }
+      .addOnFailureListener { e ->
+        promise.reject("ERROR", e.message, e)
+      }
   }
 }
 

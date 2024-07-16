@@ -10,11 +10,14 @@ export default function InkCanvas ({ onStrokeEnd }) {
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
         const { locationX, locationY } = evt.nativeEvent;
-        currentStroke.current.push({ x: locationX, y: locationY, t: Date.now() });
+        // currentStroke.current.push({ x: locationX, y: locationY, t: Date.now() });
+        currentStroke.current.push([locationX,locationY,Date.now()]);
       },
       onPanResponderRelease: () => {
-        setStrokes([...strokes, currentStroke.current]);
-        onStrokeEnd([...strokes, currentStroke.current]);
+        var newState = [...strokes, currentStroke.current];
+        // console.log(newState);
+        setStrokes(newState);
+        onStrokeEnd(newState);
         currentStroke.current = [];
       },
     })

@@ -8,6 +8,7 @@ export default function Page () {
 
   const handleStrokeEnd = async (strokes) => {
     try {
+      console.log(strokes);
       const result = await Settings.recognizeInkAsync(strokes);
       setRecognizedText(result);
     } catch (error) {
