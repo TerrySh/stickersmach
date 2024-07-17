@@ -1,11 +1,16 @@
 import { Button, Text, View } from "react-native";
 import { Link } from "expo-router";
 import React from "react";
-// import InckRec from "./ink-recog";
+import InckRec from "./ink-recog";
 
 export default function Page(){
 
     return (
+          <InckRec />
+    )
+}
+
+/* 
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
             <Text>Home Page</Text>
             <Link href="/ink-recog">ink recog</Link>
@@ -17,8 +22,4 @@ export default function Page(){
             <Link href="/privacy-policy">Privacy Policy</Link>
             <Link href="/terms-of-service">Terms of Service</Link>
         </View>
-    )
-}
-
-/* 
 */

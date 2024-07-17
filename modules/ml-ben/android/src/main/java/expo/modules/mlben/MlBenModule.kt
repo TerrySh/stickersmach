@@ -27,6 +27,16 @@ class MlBenModule : Module() {
       return@Function getPreferences().getString("theme", "system")
     }
 
+    AsyncFunction("getSupportedLanguages") { promise: Promise ->
+      try {
+        val modelIdentifiers = DigitalInkRecognitionModelIdentifier.allModelIdentifiers()
+        val languages = modelIdentifiers.map { it.languageTag }
+        promise.resolve(languages)
+      } catch (e: Exception) {
+        promise.reject("EXCEPTION", e.message, e)
+      }
+    }
+
     AsyncFunction("recognizeInk") { strokes: ReadableArray, promise: Promise ->
       try {
         val inkBuilder = Ink.builder()

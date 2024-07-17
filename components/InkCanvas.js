@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { View, StyleSheet, PanResponder, Text } from 'react-native';
 
 export default function InkCanvas ({ onStrokeEnd }) {
+  // console.log("InkCanvas page");
   const [strokes, setStrokes] = useState([]);
   const currentStroke = useRef([]);
 

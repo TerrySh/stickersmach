@@ -4,11 +4,13 @@ import InkCanvas from '../../components/InkCanvas';
 import * as Settings from '../../modules/ml-ben'
 
 export default function Page () {
+  console.log("ink recg page");
   const [recognizedText, setRecognizedText] = useState('');
 
   const handleStrokeEnd = async (strokes) => {
     try {
-      console.log(strokes);
+      console.log(await Settings.getSupportedLanguages())
+      // console.log(strokes);
       const result = await Settings.recognizeInkAsync(strokes);
       setRecognizedText(result);
     } catch (error) {
